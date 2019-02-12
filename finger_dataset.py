@@ -46,6 +46,7 @@ def _get_files(dataset_split):
         if os.path.exists(os.path.join(dataset_root, filenamebase)):
             valid_annots.append(annot_txt_file_name)
     
+    print ("valid annots:{}".format(valid_annots))
     return valid_annots
     
 
@@ -73,7 +74,7 @@ def _convert_dataset(dataset_split):
     _NUM_SHARDS = len(annot_files)
     annot_file_per_shard = 1
     if len(annot_files) > MAX_NUM_SHARDS:
-        annot_file_per_shard = int(len(annot_files) /MAX_NUM_SHARDS)
+        annot_file_per_shard = round(1.0 * len(annot_files) / MAX_NUM_SHARDS)
         _NUM_SHARDS = MAX_NUM_SHARDS
 
     start_index = 0
@@ -84,8 +85,8 @@ def _convert_dataset(dataset_split):
             dataset_split, shard_id, _NUM_SHARDS)
         output_filename = os.path.join(tfrecord_output_dir, shard_filename)
 
-        if shard_id == _NUM_SHARDS:
-            end_index = len(annot_files) - 1
+        if shard_id == _NUM_SHARDS-1:
+            end_index = len(annot_files) 
         else:
             end_index = start_index + annot_file_per_shard
 
@@ -94,8 +95,6 @@ def _convert_dataset(dataset_split):
                 annot_txt_file_name = annot_files[_idx]
                 img_folder = dirs[_idx]
                 
-                print (annot_txt_file_name)
-
                 annot_contents = open(annot_txt_file_name, 'r').readlines()
                 for annot_content in annot_contents:
                     content_arr = annot_content.split()
@@ -121,7 +120,7 @@ def _convert_dataset(dataset_split):
         start_index = end_index
     
         sys.stdout.write('\n')
-        sys.stdout.flush()
+        #sys.stdout.flush()
 
 def main(unused_argv):
   # Only support converting 'train' and 'eval' sets for now.
@@ -140,9 +139,9 @@ def _parse_function(example_proto):
         'image/width': tf.FixedLenFeature(
             (), tf.int64, default_value=0),
         "image/bbox": tf.FixedLenFeature(
-            (2,), tf.float, default_value=None),
+            (2,), tf.float32, default_value=None),
         'image/points': tf.FixedLenFeature(
-            (6,), tf.float, default_value=None),
+            (6,), tf.float32, default_value=None),
     }
 
     parsed_features = tf.parse_single_example(example_proto, keys_to_features)
