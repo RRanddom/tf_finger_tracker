@@ -147,12 +147,16 @@ def _parse_function(example_proto):
     parsed_features = tf.parse_single_example(example_proto, keys_to_features)
 
     with tf.variable_scope('decoder'):
-        input_image = tf.image.decode_image(parsed_features["image/encoded"], channels=3),
+        input_image = tf.image.decode_image(parsed_features["image/encoded"], channels=3)
+        input_image.set_shape([480,640,3])
         file_name = parsed_features["image/filename"]
         input_height = parsed_features["image/height"]
         input_width = parsed_features["image/width"]
         bbox = parsed_features["image/bbox"]
         points = parsed_features["image/points"]
+        print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        print (input_image)
+        print ("*********************************************")
 
     return input_image, file_name, input_height, input_width, bbox, points
 

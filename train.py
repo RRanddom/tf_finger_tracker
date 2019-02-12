@@ -47,11 +47,14 @@ def input_pipeline(split, num_epochs=1):
 
 def vis_input_data():
     image, bbox, points = input_pipeline("train", num_epochs=1)
+
+    print ("what is image:{}".format(image.shape))
     sess = tf.Session()
 
     while True:
         img_nd, bbox_nd, points_nd = sess.run([image, bbox, points])
-        img_nd = img_nd[0].astype('uint8')[0]
+
+        img_nd = img_nd[0].astype('uint8')
         bbox_nd = bbox_nd[0]
         points_nd = points_nd[0]
 
@@ -70,6 +73,9 @@ def vis_input_data():
         cv2.circle(img_nd, tuple(points_nd[1]) ,3, (0,255,33), -1)
         cv2.circle(img_nd, tuple(points_nd[2]) ,3, (0,255,33), -1)
         cv2.rectangle(img_nd, tuple(bbox_nd[0]), tuple(bbox_nd[1]), color=(0,0,255))
+
+        print (bbox_nd)
+
 
         # p1,p2,p3,p4 = [tuple(point) for point in list(label_nd)]
 

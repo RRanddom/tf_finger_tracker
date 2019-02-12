@@ -23,14 +23,14 @@ def random_left_right_flip(image_tensor, bbox_tensor, points_tensor, image_width
     """
     random_value = tf.random_uniform([])
     is_flipped = tf.less_equal(random_value, prob)
-    
+
     def flip():
         image_tensor_reversed = tf.reverse_v2(image_tensor, [1])
 
-        bbox_x_coords = image_width - bbox_tensor[:,0]
+        bbox_x_coords = 1.0 - bbox_tensor[:,0]
         bbox_y_coords = bbox_tensor[:,1]
 
-        pts_x_coords = image_width - points_tensor[:,0]
+        pts_x_coords = 1.0 - points_tensor[:,0]
         pts_y_coords = points_tensor[:,1]
 
         bbox_ret = tf.stack([bbox_x_coords, bbox_y_coords], axis=1)
