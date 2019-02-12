@@ -139,7 +139,7 @@ def _parse_function(example_proto):
         'image/width': tf.FixedLenFeature(
             (), tf.int64, default_value=0),
         "image/bbox": tf.FixedLenFeature(
-            (2,), tf.float32, default_value=None),
+            (4,), tf.float32, default_value=None),
         'image/points': tf.FixedLenFeature(
             (6,), tf.float32, default_value=None),
     }

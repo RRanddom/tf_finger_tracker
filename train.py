@@ -46,14 +46,31 @@ def input_pipeline(split, num_epochs=1):
     return iterator.get_next()
 
 def vis_input_data():
-    image, label = input_pipeline("train", num_epochs=1)
+    image, bbox, points = input_pipeline("train", num_epochs=1)
     sess = tf.Session()
 
     while True:
-        img_nd, label_nd = sess.run([image, label])
-        img_nd = img_nd[0].astype('uint8')
+        img_nd, bbox_nd, points_nd = sess.run([image, bbox, points])
+        img_nd = img_nd[0].astype('uint8')[0]
+        bbox_nd = bbox_nd[0]
+        points_nd = points_nd[0]
+
+        bbox_nd[:,0] *= 640
+        bbox_nd[:,1] *= 480
+
+        points_nd[:,0] *= 640
+        points_nd[:,1] *= 480
+
+        bbox_nd = np.round(bbox_nd).astype('int')
+        points_nd = np.round(points_nd).astype('int')
+
         img_nd = cv2.cvtColor(img_nd, cv2.COLOR_RGB2BGR)
-        label_nd = label_nd[0].astype('int')
+        
+        cv2.circle(img_nd, tuple(points_nd[0]) ,3, (0,255,33), -1)
+        cv2.circle(img_nd, tuple(points_nd[1]) ,3, (0,255,33), -1)
+        cv2.circle(img_nd, tuple(points_nd[2]) ,3, (0,255,33), -1)
+        cv2.rectangle(img_nd, tuple(bbox_nd[0]), tuple(bbox_nd[1]), color=(0,0,255))
+
         # p1,p2,p3,p4 = [tuple(point) for point in list(label_nd)]
 
         # cv2.line(img_nd, p1, p2, [0,255,0], 3)
@@ -61,10 +78,11 @@ def vis_input_data():
         # cv2.line(img_nd, p4, p3, [0,255,0], 3)
         # cv2.line(img_nd, p3, p1, [0,255,0], 3)
 
-        # cv2.imshow('frame', img_nd)
-        # cv2.waitKey(100)
+        cv2.imshow('frame', img_nd)
+        cv2.waitKey(100)
         print (img_nd.shape)
-        print (label_nd)
+        print (bbox_nd.shape)
+        print (points_nd.shape)
 
 if __name__ == "__main__":
 

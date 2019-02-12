@@ -22,6 +22,10 @@ def preprocess_image_and_points(input_image, image_name, height, width, bbox, po
     Raises:
     """
     # input_image.set_shape([height, width, 3])
+    
+    print ("what is input_image:{}, what is bbox:{} what is points:{}".format(input_image, bbox, points))
+    #input_image, file_name, input_height, input_width, bbox, points
+
     height = tf.cast(height, tf.float32)
     width = tf.cast(width, tf.float32)
 
@@ -32,7 +36,7 @@ def preprocess_image_and_points(input_image, image_name, height, width, bbox, po
     bbox = tf.reshape(bbox, [2,2])
     bbox = tf.cast(bbox, tf.float32)
 
-    input_image, bbox, points = random_crop(input_image, bbox, points)
+    #input_image, bbox, points = random_crop(input_image, bbox, points)
     
     if is_training:
         input_image, bbox, points = random_left_right_flip(input_image, bbox, points, width, height)

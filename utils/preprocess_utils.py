@@ -3,8 +3,8 @@ import tensorflow as tf
         # input_image, points = random_left_right_flip(input_image, bbox, points, width, height)
 
 
-dest_width = 488
-dest_height = 488
+dest_width = 488/640.0
+dest_height = 488/480.0
 
 def random_left_right_flip(image_tensor, bbox_tensor, points_tensor, image_width, image_height, prob=.3):
     """ Randomly left_right flips the image_tensor ,along with the points
@@ -52,8 +52,8 @@ def random_crop(image_tensor, bbox_tensor, points_tensor):#image_width, image_he
     # x belongs to [x_max-dest_width, x_min]
     # y belongs to [y_max-dest_height, y_min]
 
-    rand_x = tf.cast((tf.random_uniform([])*(x_max-dest_width-x_min) + x_max-dest_width), tf.int)
-    rand_y = tf.cast(tf.random_uniform([])*(y_max-dest_height-y_min) + y_max-dest_height, tf.int)
+    rand_x = tf.random_uniform([])*(x_max-dest_width-x_min) + x_max-dest_width 
+    rand_y = tf.random_uniform([])*(y_max-dest_height-y_min) + y_max-dest_height
 
     image_cropped = image_tensor[rand_y:rand_y+dest_height, rand_x:rand_x+dest_width, :]
 
