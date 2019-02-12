@@ -13,8 +13,8 @@ from glob import glob
 
 MAX_NUM_SHARDS = 4
 
-dataset_root = "/data/FingerTipDataset"
-tfrecord_output_dir = "/data/FingerTipDataset/tfrecord"
+dataset_root = "/Users/zjcneil_2018/Downloads/FingerTipDataset"
+tfrecord_output_dir = "/Users/zjcneil_2018/Downloads/FingerTipDataset/tfrecord"
 annot_dir = "txt"
 
 eval_parts = ["I_TennisField"]

@@ -68,62 +68,54 @@ def vis_input_data():
         points_nd = np.round(points_nd).astype('int')
 
         img_nd = cv2.cvtColor(img_nd, cv2.COLOR_RGB2BGR)
-        
+
+        cv2.rectangle(img_nd, tuple(bbox_nd[0]), tuple(bbox_nd[1]), color=(0,0,255))
         cv2.circle(img_nd, tuple(points_nd[0]) ,3, (0,255,33), -1)
         cv2.circle(img_nd, tuple(points_nd[1]) ,3, (0,255,33), -1)
         cv2.circle(img_nd, tuple(points_nd[2]) ,3, (0,255,33), -1)
-        cv2.rectangle(img_nd, tuple(bbox_nd[0]), tuple(bbox_nd[1]), color=(0,0,255))
 
-        print (bbox_nd)
-
-
-        # p1,p2,p3,p4 = [tuple(point) for point in list(label_nd)]
-
-        # cv2.line(img_nd, p1, p2, [0,255,0], 3)
-        # cv2.line(img_nd, p2, p4, [0,255,0], 3)
-        # cv2.line(img_nd, p4, p3, [0,255,0], 3)
-        # cv2.line(img_nd, p3, p1, [0,255,0], 3)
+        print ("heyhey:{}".format(img_nd.shape))
 
         cv2.imshow('frame', img_nd)
         cv2.waitKey(100)
-        print (img_nd.shape)
-        print (bbox_nd.shape)
-        print (points_nd.shape)
 
 if __name__ == "__main__":
 
-    vis_input_data()
+    # vis_input_data()
 
-    # tf.logging.set_verbosity(tf.logging.INFO)
+    tf.logging.set_verbosity(tf.logging.INFO)
 
-    # run_config = tf.estimator.RunConfig()\
-    #                 .replace(save_summary_steps=FLAGS.save_summaries_steps)\
-    #                 .replace(log_step_count_steps=FLAGS.log_steps)
-    # decay_factor = .9
+    run_config = tf.estimator.RunConfig()\
+                    .replace(save_summary_steps=FLAGS.save_summaries_steps)\
+                    .replace(log_step_count_steps=FLAGS.log_steps)
+    decay_factor = .9
 
-    # train_dir = FLAGS.train_logdir
+    train_dir = FLAGS.train_logdir
 
-    # params = {
-    #     "width" : 600,
-    #     "height" : 800,
-    #     "depth_multiplier" : .5,
-    #     "train_dir" : train_dir,
-    #     "learning_rate" : FLAGS.base_learning_rate,
-    #     "pretrained_model" : FLAGS.pretrained_model
-    # }
+    width = 640
+    height = 480
 
-    # num_of_training_epochs = 8
-    # model = tf.estimator.Estimator(
-    #     model_fn = keypoints_heatmaps_model,
-    #     model_dir = train_dir,
-    #     config = run_config,
-    #     params = params
-    # )
+    params = {
+        "width" : 640,
+        "height" : 480,
+        "depth_multiplier" : .5,
+        "train_dir" : train_dir,
+        "learning_rate" : FLAGS.base_learning_rate,
+        "pretrained_model" : FLAGS.pretrained_model
+    }
 
-    # for epoch in range(num_of_training_epochs):
-    #     tf.logging.info("Starting a training cycle.")
-    #     model.train(input_fn=lambda : input_pipeline('train'))
-    #     lr = params["learning_rate"] * decay_factor
-    #     params.update({"learning_rate" : lr})
-    #     tf.logging.info("Starting to evaluate.")
-    #     model.evaluate(input_fn=lambda : input_pipeline('eval'))
+    num_of_training_epochs = 5
+    model = tf.estimator.Estimator(
+        model_fn = keypoints_heatmaps_model,
+        model_dir = train_dir,
+        config = run_config,
+        params = params
+    )
+
+    for epoch in range(num_of_training_epochs):
+        tf.logging.info("Starting a training cycle.")
+        model.train(input_fn=lambda : input_pipeline('train'))
+        lr = params["learning_rate"] * decay_factor
+        params.update({"learning_rate" : lr})
+        tf.logging.info("Starting to evaluate.")
+        model.evaluate(input_fn=lambda : input_pipeline('eval'))

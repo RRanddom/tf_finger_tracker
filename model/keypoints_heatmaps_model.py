@@ -57,10 +57,11 @@ def keypoints_heatmaps_model(features, labels, mode, params=None):
     if mode == tf.estimator.ModeKeys.PREDICT:
         return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
-    gt_keypoints = labels
-    tmp1 = gt_keypoints[:,:,0] / width
-    tmp2 = gt_keypoints[:,:,1] / height 
-    gt_keypoints_norm = tf.stack([tmp1, tmp2], axis=2)
+    bbox, gt_keypoints = labels
+    # tmp1 = gt_keypoints[:,:,0] / width
+    # tmp2 = gt_keypoints[:,:,1] / height 
+    gt_keypoints_norm = tf.identity(gt_keypoints, name="norm")
+    #tf.stack([tmp1, tmp2], axis=2)
 
     total_loss = 0
     total_mse_loss = 0
