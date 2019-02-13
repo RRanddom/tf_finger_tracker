@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 from finger_dataset import get_dataset_split
 
-from model.keypoints_heatmaps_model import keypoints_heatmaps_model
+from model.keypoints_heatmaps_model import keypoints_heatmaps_model,main_network
 from functools import partial
 from PIL import Image,ImageDraw
 from glob import glob
@@ -79,43 +79,63 @@ def vis_input_data():
         cv2.imshow('frame', img_nd)
         cv2.waitKey(100)
 
+def vis_infer_result():
+    train_dir = FLAGS.train_logdir
+    img = tf.placeholder(tf.float32, shape=[None, 480, 640])
+    keypoints_prediction, heatmaps_prediction, keypoints, heatmaps = main_network(img)
+
+    sess = tf.Session()
+    saver = tf.train.Saver()
+    saver.restore(sess, tf.train.latest_checkpoint(train_dir))
+
+    for img_name in glob("/data/FingerTipDataset/I_Avenue/*.png"):
+        # im_pil = Image.open(img_name)
+        mat = cv2.imread(img_name)
+        mat_rgb = cv2.cvtColor(mat, cv2.COLOR_BGR2RGB)
+        mat_rgb = np.expand_dims(mat_rgb, 0)
+        kpd = sess.run(keypoints, feed_dict={img:mat_rgb})
+        print (kpd)
+
+
+
 if __name__ == "__main__":
 
     # vis_input_data()
+    vis_infer_result()
 
-    tf.logging.set_verbosity(tf.logging.INFO)
+    # tf.logging.set_verbosity(tf.logging.INFO)
 
-    run_config = tf.estimator.RunConfig()\
-                    .replace(save_summary_steps=FLAGS.save_summaries_steps)\
-                    .replace(log_step_count_steps=FLAGS.log_steps)
-    decay_factor = .9
+    # run_config = tf.estimator.RunConfig()\
+    #                 .replace(save_summary_steps=FLAGS.save_summaries_steps)\
+    #                 .replace(log_step_count_steps=FLAGS.log_steps)
+    # decay_factor = .9
 
-    train_dir = FLAGS.train_logdir
+    # train_dir = FLAGS.train_logdir
 
-    width = 640
-    height = 480
+    # width = 640
+    # height = 480
 
-    params = {
-        "width" : 640,
-        "height" : 480,
-        "depth_multiplier" : .5,
-        "train_dir" : train_dir,
-        "learning_rate" : FLAGS.base_learning_rate,
-        "pretrained_model" : FLAGS.pretrained_model
-    }
+    # params = {
+    #     "width" : 640,
+    #     "height" : 480,
+    #     "depth_multiplier" : .5,
+    #     "train_dir" : train_dir,
+    #     "learning_rate" : FLAGS.base_learning_rate,
+    #     "pretrained_model" : FLAGS.pretrained_model
+    # }
 
-    num_of_training_epochs = 5
-    model = tf.estimator.Estimator(
-        model_fn = keypoints_heatmaps_model,
-        model_dir = train_dir,
-        config = run_config,
-        params = params
-    )
+    # num_of_training_epochs = 5
+    # model = tf.estimator.Estimator(
+    #     model_fn = keypoints_heatmaps_model,
+    #     model_dir = train_dir,
+    #     config = run_config,
+    #     params = params
+    # )
 
-    for epoch in range(num_of_training_epochs):
-        tf.logging.info("Starting a training cycle.")
-        model.train(input_fn=lambda : input_pipeline('train'))
-        lr = params["learning_rate"] * decay_factor
-        params.update({"learning_rate" : lr})
-        tf.logging.info("Starting to evaluate.")
-        model.evaluate(input_fn=lambda : input_pipeline('eval'))
+    # for epoch in range(num_of_training_epochs):
+    #     tf.logging.info("Starting a training cycle.")
+    #     model.train(input_fn=lambda : input_pipeline('train'))
+    #     lr = params["learning_rate"] * decay_factor
+    #     params.update({"learning_rate" : lr})
+    #     tf.logging.info("Starting to evaluate.")
+    #     model.evaluate(input_fn=lambda : input_pipeline('eval'))
