@@ -13,8 +13,8 @@ from glob import glob
 
 MAX_NUM_SHARDS = 4
 
-dataset_root = "/Users/zjcneil_2018/Downloads/FingerTipDataset"
-tfrecord_output_dir = "/Users/zjcneil_2018/Downloads/FingerTipDataset/tfrecord"
+dataset_root = "/data/FingerTipDataset"
+tfrecord_output_dir = "/data/FingerTipDataset/tfrecord"
 annot_dir = "txt"
 
 eval_parts = ["I_TennisField"]
@@ -74,7 +74,7 @@ def _convert_dataset(dataset_split):
     _NUM_SHARDS = len(annot_files)
     annot_file_per_shard = 1
     if len(annot_files) > MAX_NUM_SHARDS:
-        annot_file_per_shard = round(1.0 * len(annot_files) / MAX_NUM_SHARDS)
+        annot_file_per_shard = int(round(1.0 * len(annot_files) / MAX_NUM_SHARDS))
         _NUM_SHARDS = MAX_NUM_SHARDS
 
     start_index = 0
@@ -98,6 +98,8 @@ def _convert_dataset(dataset_split):
                 annot_contents = open(annot_txt_file_name, 'r').readlines()
                 for annot_content in annot_contents:
                     content_arr = annot_content.split()
+                    if len(content_arr) == 0 :
+                        continue
                     img_name = content_arr[0]
                     pts = content_arr[1:-4]
                     pts = [float(_) for _ in pts]

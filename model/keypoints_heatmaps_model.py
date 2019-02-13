@@ -14,12 +14,12 @@ def main_network(images, depth_multiplier=.5, is_training=False):
 
     with tf.variable_scope("heats_map_regression"):
         net = tf.identity(activation_maps, 'mid_layer')
-        keypoints_logits = tf.layers.conv2d(net, 4, kernel_size=1, activation=None, name="pred_keypoints")
+        keypoints_logits = tf.layers.conv2d(net, 3, kernel_size=1, activation=None, name="pred_keypoints")
 
         heatmaps = []
         keypoints = []
 
-        for i in range(4):
+        for i in range(3):
             heatmap, keypoint = dsnt.dsnt(keypoints_logits[..., i])
             # origin keypoint ~ [-1,1].
             keypoint = (keypoint+1)/2
@@ -48,8 +48,8 @@ def keypoints_heatmaps_model(features, labels, mode, params=None):
         "raw_imgs" : features,
     }
 
-    tf.summary.image("keypoints_heatmap",  tf.expand_dims(heatmaps_pred,3))
-    tf.summary.image("raw_image", features)
+    #tf.summary.image("keypoints_heatmap",  tf.expand_dims(heatmaps_pred,3))
+    #tf.summary.image("raw_image", features)
     
     predictions.update({"keypoints_preds" : keypoints_pred})
     predictions.update({"heatmaps_preds"  : heatmaps_pred})
@@ -57,7 +57,8 @@ def keypoints_heatmaps_model(features, labels, mode, params=None):
     if mode == tf.estimator.ModeKeys.PREDICT:
         return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
-    bbox, gt_keypoints = labels
+    gt_keypoints = labels["points"]
+    bbox = labels["bbox"]
     # tmp1 = gt_keypoints[:,:,0] / width
     # tmp2 = gt_keypoints[:,:,1] / height 
     gt_keypoints_norm = tf.identity(gt_keypoints, name="norm")
@@ -68,7 +69,7 @@ def keypoints_heatmaps_model(features, labels, mode, params=None):
     total_reg_loss = 0
     
     tensors_to_log = {} 
-    for i in range(4):
+    for i in range(3):
         gt_landmark_i = gt_keypoints_norm[:,i,:]
         mse_loss = tf.losses.mean_squared_error(gt_landmark_i, keypoints[i])
         reg_loss = dsnt.js_reg_loss(heatmaps[i], gt_landmark_i)

@@ -37,4 +37,4 @@ def preprocess_image_and_points(input_image, image_name, height, width, bbox, po
     if is_training:
         input_image, bbox, points = random_left_right_flip(input_image, bbox, points, width, height)
 
-    return input_image, bbox, points
+    return input_image, {"bbox":bbox, "points":points} 
