@@ -1,1 +1,4 @@
-## tensworflow app tracks finger keypoint
+## finger keypoint traker
+
+
+still working on it. 💪
