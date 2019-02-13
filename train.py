@@ -81,7 +81,7 @@ def vis_input_data():
 
 def vis_infer_result():
     train_dir = FLAGS.train_logdir
-    img = tf.placeholder(tf.float32, shape=[None, 480, 640])
+    img = tf.placeholder(tf.float32, shape=[1, 480, 640])
     keypoints_prediction, heatmaps_prediction, keypoints, heatmaps = main_network(img)
 
     sess = tf.Session()
