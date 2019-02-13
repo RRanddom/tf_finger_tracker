@@ -24,8 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype) sharedInstance;
 
-- (BOOL) inferImage:(const cv::Mat &)inputImage
-        resultImage:(cv::Mat&)result
+- (void) inferImage:(const cv::Mat &)inputImage
             heatmap:(cv::Mat&)heatmap;
 @end
 

@@ -16,6 +16,7 @@
 		61BCD7F022141DC400B61CFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BCD7EF22141DC400B61CFE /* main.m */; };
 		61BCD7F722141E8F00B61CFE /* finger_track.tflite in Resources */ = {isa = PBXBuildFile; fileRef = 61BCD7F622141E8F00B61CFE /* finger_track.tflite */; };
 		61BCD7FA22141EB600B61CFE /* TFHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 61BCD7F822141EB600B61CFE /* TFHelper.mm */; };
+		61BCD7FD221446C500B61CFE /* OpenCVUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = 61BCD7FC221446C500B61CFE /* OpenCVUtil.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,8 @@
 		61BCD7F622141E8F00B61CFE /* finger_track.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; name = finger_track.tflite; path = ../finger_track.tflite; sourceTree = "<group>"; };
 		61BCD7F822141EB600B61CFE /* TFHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TFHelper.mm; sourceTree = "<group>"; };
 		61BCD7F922141EB600B61CFE /* TFHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHelper.h; sourceTree = "<group>"; };
+		61BCD7FB221446C400B61CFE /* OpenCVUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVUtil.h; sourceTree = "<group>"; };
+		61BCD7FC221446C500B61CFE /* OpenCVUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVUtil.mm; sourceTree = "<group>"; };
 		68E709E030938A9DEB4BA6E5 /* Pods-FingerTrackDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FingerTrackDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FingerTrackDemo/Pods-FingerTrackDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		8DE605DA9302BB552B5539CC /* Pods-FingerTrackDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FingerTrackDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-FingerTrackDemo/Pods-FingerTrackDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +83,8 @@
 		61BCD7DF22141DC200B61CFE /* FingerTrackDemo */ = {
 			isa = PBXGroup;
 			children = (
+				61BCD7FB221446C400B61CFE /* OpenCVUtil.h */,
+				61BCD7FC221446C500B61CFE /* OpenCVUtil.mm */,
 				61BCD7F922141EB600B61CFE /* TFHelper.h */,
 				61BCD7F822141EB600B61CFE /* TFHelper.mm */,
 				61BCD7E022141DC200B61CFE /* AppDelegate.h */,
@@ -203,6 +208,7 @@
 				61BCD7E522141DC200B61CFE /* ViewController.mm in Sources */,
 				61BCD7FA22141EB600B61CFE /* TFHelper.mm in Sources */,
 				61BCD7F022141DC400B61CFE /* main.m in Sources */,
+				61BCD7FD221446C500B61CFE /* OpenCVUtil.mm in Sources */,
 				61BCD7E222141DC200B61CFE /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
