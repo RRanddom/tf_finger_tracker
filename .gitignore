@@ -11,4 +11,4 @@ nohup.out
 data/*
 
 # iOS App
-Demo/Pods/*
+FingerTrackDemo/Pods/*

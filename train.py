@@ -84,19 +84,40 @@ def vis_infer_result():
     img = tf.placeholder(tf.float32, shape=[1, 480, 640])
     keypoints_prediction, heatmaps_prediction, keypoints, heatmaps = main_network(img)
 
+    print ("what is keypoints_prediction:{} what is heatmaps_prediction:{} keypoints:{} heatmaps:{}".format(
+        keypoints_prediction, heatmaps_prediction, keypoints, heatmaps))
+
+# what is keypoints_prediction:Tensor("keypoints_pred:0", shape=(?, 3, 2), dtype=float32)
+#  what is heatmaps_prediction:Tensor("heatmaps:0", shape=(?, 15, 20), dtype=float32)
+#  keypoints:[<tf.Tensor 'heats_map_regression/truediv_3:0' shape=(?, 2) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_7:0' shape=(?, 2) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_11:0' shape=(?, 2) dtype=float32>] heatmaps:[<tf.Tensor 'heats_map_regression/truediv:0' shape=(?, 15, 20) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_4:0' shape=(?, 15, 20) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_8:0' shape=(?, 15, 20) dtype=float32>]
+
+
     sess = tf.Session()
     saver = tf.train.Saver()
     saver.restore(sess, tf.train.latest_checkpoint(train_dir))
 
-    for img_name in glob("/data/FingerTipDataset/I_Avenue/*.png"):
+    for img_name in sorted(glob("/data/FingerTipDataset/I_Avenue/*.png")):
         # im_pil = Image.open(img_name)
         mat = cv2.imread(img_name)
         mat_rgb = cv2.cvtColor(mat, cv2.COLOR_BGR2RGB)
         mat_rgb = np.expand_dims(mat_rgb, 0)
         kpd = sess.run(keypoints, feed_dict={img:mat_rgb})
-        print (kpd)
+        kp1 = kpd[0][0]
+        kp2 = kpd[1][0]
+        kp3 = kpd[2][0]
+        kp1 *= np.array([640, 480])
+        kp2 *= np.array([640, 480])
+        kp3 *= np.array([640, 480])
+        kp1 = np.round(kp1).astype('int')
+        kp2 = np.round(kp2).astype('int')
+        kp3 = np.round(kp3).astype('int')
 
+        cv2.circle(mat, tuple(kp1) ,3, (0,255,33), -1)
+        cv2.circle(mat, tuple(kp2) ,3, (0,255,33), -1)
+        cv2.circle(mat, tuple(kp3) ,3, (0,255,33), -1)
 
+        cv2.imshow('frame', mat)
+        cv2.waitKey(100)
 
 if __name__ == "__main__":
 
