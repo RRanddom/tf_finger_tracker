@@ -20,7 +20,7 @@ flags.DEFINE_string('train_logdir', '/data/FingerTipDataset/train',
 flags.DEFINE_string("pretrained_model", "pretrained_model/mobilenet_v2/mobilenet_v2_0.5_224.ckpt",
                     "Where the pretrained model stored")
 
-flags.DEFINE_float('base_learning_rate', 3e-5,
+flags.DEFINE_float('base_learning_rate', 3e-4,
                    'The base learning rate for model training.')
 
 flags.DEFINE_integer('train_batch_size', 16,
@@ -84,14 +84,6 @@ def vis_infer_result():
     img = tf.placeholder(tf.float32, shape=[1, 480, 640])
     keypoints_prediction, heatmaps_prediction, keypoints, heatmaps = main_network(img)
 
-    print ("what is keypoints_prediction:{} what is heatmaps_prediction:{} keypoints:{} heatmaps:{}".format(
-        keypoints_prediction, heatmaps_prediction, keypoints, heatmaps))
-
-# what is keypoints_prediction:Tensor("keypoints_pred:0", shape=(?, 3, 2), dtype=float32)
-#  what is heatmaps_prediction:Tensor("heatmaps:0", shape=(?, 15, 20), dtype=float32)
-#  keypoints:[<tf.Tensor 'heats_map_regression/truediv_3:0' shape=(?, 2) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_7:0' shape=(?, 2) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_11:0' shape=(?, 2) dtype=float32>] heatmaps:[<tf.Tensor 'heats_map_regression/truediv:0' shape=(?, 15, 20) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_4:0' shape=(?, 15, 20) dtype=float32>, <tf.Tensor 'heats_map_regression/truediv_8:0' shape=(?, 15, 20) dtype=float32>]
-
-
     sess = tf.Session()
     saver = tf.train.Saver()
     saver.restore(sess, tf.train.latest_checkpoint(train_dir))
@@ -120,43 +112,39 @@ def vis_infer_result():
         cv2.waitKey(100)
 
 if __name__ == "__main__":
+    tf.logging.set_verbosity(tf.logging.INFO)
 
-    # vis_input_data()
-    vis_infer_result()
+    run_config = tf.estimator.RunConfig()\
+                    .replace(save_summary_steps=FLAGS.save_summaries_steps)\
+                    .replace(log_step_count_steps=FLAGS.log_steps)
+    decay_factor = .9
 
-    # tf.logging.set_verbosity(tf.logging.INFO)
+    train_dir = FLAGS.train_logdir
 
-    # run_config = tf.estimator.RunConfig()\
-    #                 .replace(save_summary_steps=FLAGS.save_summaries_steps)\
-    #                 .replace(log_step_count_steps=FLAGS.log_steps)
-    # decay_factor = .9
+    width = 640
+    height = 480
 
-    # train_dir = FLAGS.train_logdir
+    params = {
+        "width" : 640,
+        "height" : 480,
+        "depth_multiplier" : .5,
+        "train_dir" : train_dir,
+        "learning_rate" : FLAGS.base_learning_rate,
+        "pretrained_model" : FLAGS.pretrained_model
+    }
 
-    # width = 640
-    # height = 480
+    num_of_training_epochs = 8
+    model = tf.estimator.Estimator(
+        model_fn = keypoints_heatmaps_model,
+        model_dir = train_dir,
+        config = run_config,
+        params = params
+    )
 
-    # params = {
-    #     "width" : 640,
-    #     "height" : 480,
-    #     "depth_multiplier" : .5,
-    #     "train_dir" : train_dir,
-    #     "learning_rate" : FLAGS.base_learning_rate,
-    #     "pretrained_model" : FLAGS.pretrained_model
-    # }
-
-    # num_of_training_epochs = 5
-    # model = tf.estimator.Estimator(
-    #     model_fn = keypoints_heatmaps_model,
-    #     model_dir = train_dir,
-    #     config = run_config,
-    #     params = params
-    # )
-
-    # for epoch in range(num_of_training_epochs):
-    #     tf.logging.info("Starting a training cycle.")
-    #     model.train(input_fn=lambda : input_pipeline('train'))
-    #     lr = params["learning_rate"] * decay_factor
-    #     params.update({"learning_rate" : lr})
-    #     tf.logging.info("Starting to evaluate.")
-    #     model.evaluate(input_fn=lambda : input_pipeline('eval'))
+    for epoch in range(num_of_training_epochs):
+        tf.logging.info("Starting a training cycle.")
+        model.train(input_fn=lambda : input_pipeline('train'))
+        lr = params["learning_rate"] * decay_factor
+        params.update({"learning_rate" : lr})
+        tf.logging.info("Starting to evaluate.")
+        model.evaluate(input_fn=lambda : input_pipeline('eval'))
