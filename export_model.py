@@ -10,7 +10,8 @@ image_width  = 640
 
 model_base_dir = "/data/FingerTipDataset/train/" #"/data/train_receipt/train_dir/keypoints_heatmap/"
 # meta_file_name = "model.ckpt-10209.meta"
-ckpt_file = "model.ckpt-20890"
+#model.ckpt-42120.meta
+ckpt_file = "model.ckpt-42120"
 
 def freeze_graph():
     input_placeholder = tf.placeholder(tf.float32, shape=[1, image_height, image_width, 3], name="input")
