@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		06E0B334FC85602AC072DE64 /* libPods-FingerTrackDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17BF302884179255864AA558 /* libPods-FingerTrackDemo.a */; };
+		6139D1172215450A00DF5475 /* DrawingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6139D1162215450A00DF5475 /* DrawingView.m */; };
 		61BCD7E222141DC200B61CFE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61BCD7E122141DC200B61CFE /* AppDelegate.m */; };
 		61BCD7E522141DC200B61CFE /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 61BCD7E422141DC200B61CFE /* ViewController.mm */; };
 		61BCD7E822141DC200B61CFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61BCD7E622141DC200B61CFE /* Main.storyboard */; };
@@ -21,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		17BF302884179255864AA558 /* libPods-FingerTrackDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FingerTrackDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6139D1152215450A00DF5475 /* DrawingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawingView.h; sourceTree = "<group>"; };
+		6139D1162215450A00DF5475 /* DrawingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrawingView.m; sourceTree = "<group>"; };
 		61BCD7DD22141DC200B61CFE /* FingerTrackDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FingerTrackDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61BCD7E022141DC200B61CFE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		61BCD7E122141DC200B61CFE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -96,6 +99,8 @@
 				61BCD7EB22141DC400B61CFE /* LaunchScreen.storyboard */,
 				61BCD7EE22141DC400B61CFE /* Info.plist */,
 				61BCD7EF22141DC400B61CFE /* main.m */,
+				6139D1152215450A00DF5475 /* DrawingView.h */,
+				6139D1162215450A00DF5475 /* DrawingView.m */,
 			);
 			path = FingerTrackDemo;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 				61BCD7F022141DC400B61CFE /* main.m in Sources */,
 				61BCD7FD221446C500B61CFE /* OpenCVUtil.mm in Sources */,
 				61BCD7E222141DC200B61CFE /* AppDelegate.m in Sources */,
+				6139D1172215450A00DF5475 /* DrawingView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

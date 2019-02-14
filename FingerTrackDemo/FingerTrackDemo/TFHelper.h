@@ -25,7 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) sharedInstance;
 
 - (void) inferImage:(const cv::Mat &)inputImage
-            heatmap:(cv::Mat&)heatmap;
+           heatmap1:(cv::Mat&)heatmap1
+           heatmap2:(cv::Mat&)heatmap2
+           heatmap3:(cv::Mat&)heatmap3
+             result:(cv::Mat&)result
+          keypoints:(int *)keypoints;
+//float32_t *heatmaps,
 @end
 
 NS_ASSUME_NONNULL_END

@@ -48,7 +48,6 @@ def input_pipeline(split, num_epochs=1):
 def vis_input_data():
     image, bbox, points = input_pipeline("train", num_epochs=1)
 
-    print ("what is image:{}".format(image.shape))
     sess = tf.Session()
 
     while True:
